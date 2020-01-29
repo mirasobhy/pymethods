@@ -1,8 +1,12 @@
 import numpy as np
-from .Vector import Vector
-from .. import math
-from .. import utils
-from .Angle import Angle
+try:
+    from pymethods.arrays import Vector, Angle
+    from pymethods import math, utils
+except ImportError:
+    from .Vector import Vector
+    from .. import math
+    from .. import utils
+    from .Angle import Angle
 import typing
 import logging
 _is_subset_degrees = utils.IsSubsetString('degrees')
@@ -19,13 +23,13 @@ class Basis(Vector):
                 self.__class__ = Vector
             elif self.shape[-1] == 1:
                 self.__class__ = Vector
-                
+
     def make_3d(self):
         if self.shape[0] < 3:
             return self.__class__(math.make_3d(self))
         elif self.shape[0] > 3:
             logging.info("dimensions are greater than 3 cannot convert to 3d")
-        
+
     def rotate(self, phi, units='radians'):
         normal = self.calc_normal()
         if _is_subset_degrees(units):
@@ -72,7 +76,30 @@ class Basis(Vector):
     def _new_hook_post_parse(self, out):
         out = math.normalize(out)
         if not math.is_linearly_dependent(out):
-            print("supplied vectors are not linearly independent.\
+            logging.info("supplied vectors are not linearly independent.\
                 Approximating a linearly independent basis")
             out = math.make_linearly_independent(out)
         return out
+
+    def quiverly(self, *args, **kwargs
+                 ):
+        for i, vector in enumerate(self.T):
+            if i == 0:
+                f = None
+            elif not kwargs.get('fig', None) is None:
+                f = kwargs['fig']
+            f, o = vector.quiverly(
+                fig=f, **kwargs
+            )
+        return f, o
+
+
+if __name__ == "__main__":
+    basis = Basis(
+        [1, 0, 0],
+        [0, 1, 0],
+        [0, 0, 1]
+    )
+
+    basis.quiverly()
+    f.show()

@@ -1,6 +1,5 @@
 import numpy as np
-from typing import Union, Tuple, List, Iterable
-from functools import wraps
+from typing import Union, Iterable
 
 try:
     from pymethods import math, utils
@@ -13,6 +12,7 @@ except ImportError:
 
 class Array(np.ndarray):
     pass
+
 
 class Vector(np.ndarray):
     bar = utils.NoInputFunctionAlias('magnitude', store=True)
@@ -49,7 +49,7 @@ class Vector(np.ndarray):
         Returns:
             Vector: [description]
         """
-        
+
         if len(args) == 1:
             if isinstance(args[0], Iterable):
                 out = cls._parse_single_arg(args[0])
@@ -57,15 +57,15 @@ class Vector(np.ndarray):
                 raise ValueError(f"input must {Iterable}")
         else:
             out = cls._parse_star_arg(args)
-        
+
         out = cls._new_hook_post_parse(out)
-        
+
         if column:
             if len(out.shape) == 1:
                 out = out[:, None]
-        
+
         return out.view(cls)
-    
+
     def __array_finalize__(self, obj):
         if obj is None:
             return None
@@ -90,18 +90,17 @@ class Vector(np.ndarray):
         phi = Angle(phi, units=units).rad
         return math.rotation_matrix(self, phi)
 
-
     def direct_vector(self, vector: np.ndarray) -> np.ndarray:
         """direct_vector
-        
+
         Point the current vector in the same direction as a secondary vector
-        
+
         Args:
             vector (np.ndarray): vector to point in the same direction to
-        
+
         Returns:
             np.ndarray: re-oriented vector
-        """        
+        """
         self_project = math.vector_project(self, vector)
 
         pos_dist = math.l2_norm(vector - self_project)
@@ -152,105 +151,106 @@ class Vector(np.ndarray):
         return math.cross(self, vector)
 
     def angle(self, vector: np.ndarray) -> Union[np.ndarray, np.float]:
-        return math.smallest_angle_between_vectors(self, vector)
+        return Angle(math.smallest_angle_between_vectors(self, vector))
 
     def directed_angle(
             self, vector: np.ndarray,
             direction: np.ndarray) -> Union[np.ndarray, np.float]:
-        return math.directed_angle(self, vector, direction)
+        return Angle(math.directed_angle(self, vector, direction))
 
     def skew_symmetric(self):
         return math.skew_symmetric_3d(self)
 
     def as_numpy(self):
         return self.view(np.ndarray)
-    
-    #----------- PLOTTING FUNCTIONS ------------------------------------------
-    
+
+    # ----------- PLOTTING FUNCTIONS ------------------------------------------
+
     def quiverly(
-            self, *args, 
+            self, *args,
             fig=None, showarrow=True, color="black", scale=5, origin=None,
-            arrow_size='scaled', line_kwargs=None, name='Vector', 
+            arrow_size='scaled', line_kwargs=None, name='Vector',
             showlegend=False
-        ):
-        
-        if origin==None:
+            ):
+
+        if origin is None:
             origin = np.zeros(3)
-        
+
         assert isinstance(self, Vector)
-        
+
         import plotly.graph_objs as go
-        x=np.stack([0,self[0].squeeze()]) + origin[0]
-        y=np.stack([0,self[1].squeeze()]) + origin[1]
-        
+        x = np.stack([0, self[0].squeeze()]) + origin[0]
+        y = np.stack([0, self[1].squeeze()]) + origin[1]
+
         color_scale = [[0, color], [1, color]]
-        
+
         if fig is None:
-            fig=go.Figure()
-        
+            fig = go.Figure()
+
         if len(self) == 2:
-            z =  np.zeros_like(x) + origin[2]
+            z = np.zeros_like(x) + origin[2]
         else:
             z = np.stack([0, self[2].squeeze()]) + origin[2]
 
-        if arrow_size=='scaled':
-            u=[(x[1]-x[0])/scale]
-            v=[(y[1]-y[0])/scale]
-            w=[(z[1]-z[0])/scale]
-        elif isinstance(arrow_size,(int, float)):
+        if arrow_size == 'scaled':
+            u = [(x[1]-x[0])/scale]
+            v = [(y[1]-y[0])/scale]
+            w = [(z[1]-z[0])/scale]
+        elif isinstance(arrow_size, (int, float)):
             du = (x[1]-x[0]); dv = (y[1]-y[0]); dz = (z[1]-z[0])
             mag_du = np.sqrt(du**2 + dv**2 + dz**2)
             u = [du/mag_du*arrow_size]
             v = [dv/mag_du*arrow_size]
             w = [dz/mag_du*arrow_size]
         else:
-            raise Exception("size must either be set to scaled or an int or float")
-        
+            raise Exception(
+                "size must either be set to scaled or an int or float")
+
         obj = go.Scatter3d(
-            x=x,y=y,z=z,
+            x=x, y=y, z=z,
             marker=dict(size=0),
             line=dict(color=color),
             name=name,
             showlegend=showlegend
         )
-          
+
         cone = go.Cone(
-           x=[x[1]],y=[y[1]],z=[z[1]],
+           x=[x[1]], y=[y[1]], z=[z[1]],
            u=u, v=v, w=w,
            colorscale=color_scale,
            showscale=False,
            name=None
         )
-        
+
         fig.add_trace(obj)
         fig.add_trace(cone)
         return fig, obj
-    
+
     def scatterly(
             self, *args, fig=None, color="black", showlegend=False, **kwargs):
-        
+
         import plotly.graph_objs as go
-        
+
         if fig is None:
-            fig=go.Figure()
-        
+            fig = go.Figure()
+
         x = self[0].squeeze()
         y = self[1].squeeze()
-        
+
         if len(self) == 2:
             z = 0*np.zeros_like(0)
         else:
             z = self[2].squeeze()
-            
+
         obj = go.Scatter3d(
             x=[x],y=[y],z=[z],
             showlegend=showlegend,
             **kwargs
         )
-        
+
         fig.add_trace(obj)
         return fig, obj
-    
+
 class ColumnVector(Vector):
     def __new__(cls, *args, **kwargs: dict) -> object:
         return super(ColumnVector, cls).__new__(cls, *args, column=True, **kwargs)
