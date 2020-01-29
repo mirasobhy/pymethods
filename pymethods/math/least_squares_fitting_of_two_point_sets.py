@@ -8,7 +8,7 @@ def least_squares_fitting_of_two_point_sets(
 
     estimate rigd transform required to move vector_a
     such that it overlaps vector_b
-    
+
     http://nghiaho.com/?page_id=671
 
     Args:
@@ -17,7 +17,7 @@ def least_squares_fitting_of_two_point_sets(
 
     Returns:
         Tuple[np.array]: [rotation, translation] matrices
-        
+
     """
     centroid_a = np.mean(vector_a, axis=-1)
     centroid_b = np.mean(vector_b, axis=-1)

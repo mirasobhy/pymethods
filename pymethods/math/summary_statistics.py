@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class _np_stats_descriptor:
+class np_stats_descriptor:
 
     def __init__(self, name, *args, **kwargs):
         self.name = name
@@ -31,14 +31,14 @@ class SummaryStatistics:
     default_kwargs = dict(
         axis=-1, keepdims=False
     )
-    mean = _np_stats_descriptor('mean')
-    std = _np_stats_descriptor('std')
-    var = _np_stats_descriptor('var')
-    median = _np_stats_descriptor('median')
-    q_25 = _np_stats_descriptor('quantile', 0.25)
-    q_75 = _np_stats_descriptor('quantile', 0.75)
-    max = _np_stats_descriptor('amax')
-    min = _np_stats_descriptor('amin')
+    mean = np_stats_descriptor('mean')
+    std = np_stats_descriptor('std')
+    var = np_stats_descriptor('var')
+    median = np_stats_descriptor('median')
+    q_25 = np_stats_descriptor('quantile', 0.25)
+    q_75 = np_stats_descriptor('quantile', 0.75)
+    max = np_stats_descriptor('amax')
+    min = np_stats_descriptor('amin')
     
     def __init__(
             self, data, **kwargs):

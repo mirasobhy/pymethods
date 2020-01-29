@@ -21,5 +21,5 @@ def frennet_serret(centreline: np.array) -> np.array:
     # calculate the normal
     U = dX.cross(dXX).normalize()
     V = U.cross(T).normalize()
-    U = B.cross(T).normalize()
-    return _np.stack([U, V, T], axis=0)
+    U = V.cross(T).normalize()
+    return np.stack([U, V, T], axis=0)

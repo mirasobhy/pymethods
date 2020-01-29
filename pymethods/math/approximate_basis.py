@@ -30,4 +30,4 @@ def approximate_normal(vectors: np.array) -> np.array:
     Returns:
         np.array: N Dimensions
     """
-    return approximate_basis(vectors)[:,-1]
+    return approximate_basis(vectors)[:, -1]

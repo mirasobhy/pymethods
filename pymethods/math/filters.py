@@ -27,7 +27,7 @@ def sgolay2d(z, window_size, order, derivative=None):
 
     Returns:
         np.ndarray: [description]
-    """ 
+    """
     # number of terms in the polynomial expression
     n_terms = (order + 1) * (order + 2) / 2.0
 

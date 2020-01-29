@@ -2,10 +2,10 @@ import numpy as np
 from typing import Union, Iterable
 
 try:
-    from pymethods import math, utils
+    from pymethods import math, utils, pyplot
     from pymethods.arrays import Angle
 except ImportError:
-    from .. import math
+    from .. import math, pyplot
     from ..arrays import Angle
     from .. import utils
 
@@ -251,6 +251,27 @@ class Vector(np.ndarray):
         fig.add_trace(obj)
         return fig, obj
 
+    def scatter3d(self, *args, **kwargs):
+        return pyplot.scatter3d(*self, *args, **kwargs)
+
+    def plot3d(self, *args, **kwargs):
+        return pyplot.plot3d(*self, *args, **kwargs)
+
+    def quiver3d(self, *args, origin=None, **kwargs):
+        if origin is None:
+            origin = np.zeros_like(self)
+        else:
+            origin = np.squeeze(origin) * np.ones_like(self)
+        return pyplot.quiver3d(*origin, *self, *args, **kwargs)
+
+
 class ColumnVector(Vector):
     def __new__(cls, *args, **kwargs: dict) -> object:
         return super(ColumnVector, cls).__new__(cls, *args, column=True, **kwargs)
+
+
+if __name__ == "__main__":
+    V = Vector(1, 2, 3)
+    V.quiver3d()
+    import matplotlib.pyplot as plt
+    plt.show()
