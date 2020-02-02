@@ -12,7 +12,8 @@ from .normalize import normalize
 from .scalar_project import scalar_project
 from .order_basis import order_basis
 from .approximate_basis import approximate_basis, approximate_normal
-from .least_squares_fitting_of_two_point_sets import least_squares_fitting_of_two_point_sets
+from .least_squares_fitting_of_two_point_sets import \
+    least_squares_fitting_of_two_point_sets
 from .rigid_transform import rigid_transform
 from .dot import dot
 from .vector_project import vector_project

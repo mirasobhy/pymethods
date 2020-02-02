@@ -1,7 +1,7 @@
 try:
-    from pymethods import (arrays, math, utils)
+    from pymethods import (arrays, math, utils, pyplot)
 except ImportError:
-    from .. import arrays
+    from .. import arrays, pyplot
     from .. import math
     from .. import utils
 
@@ -73,8 +73,24 @@ class Curve(arrays.Vectorspace):
 
     def _splinify(self, reparam=None):
 
+        if reparam is None:
+            s = self.s_frac
+        else:
+            s = reparam
+
         for i in range(self.shape[0]):
-            spline_func = sci.splrep(self.s_frac, self[i], **self.splineparams)
+            try:
+                spline_func = sci.splrep(s, self[i], **self.splineparams)
+            except:
+                y_unique, unique_inds = np.unique(
+                    self[i][0:-2], return_index=True)
+                unique_inds.sort()
+                s_unique = np.concatenate(
+                    [s[unique_inds], s[-1, None]])
+                y_unique = np.concatenate(
+                    [y_unique, self[i][-1, None]])
+                spline_func = sci.splrep(
+                    s_unique, y_unique, **self.splineparams)
             self.dim_funcs.append(SplineFunc(spline_func))
 
     def __call__(self, s, *args, reparam_curve=None, **kwargs) -> np.ndarray:
