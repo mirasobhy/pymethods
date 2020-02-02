@@ -53,15 +53,14 @@ class Basis(Vector):
 
     @classmethod
     def _parse_single_arg(cls, array: np.ndarray) -> np.ndarray:
-        out = np.array(args[0])
-        assert utils.len_shape(out) == 2, \
+        assert utils.len_shape(array) == 2, \
             "The lenshape of the input must be 2"
-        assert out.shape[0] == 3, \
+        assert array.shape[0] == 3, \
             "expecting input of dimension 3x3"
-        assert out.shape[1] == 3, \
+        assert array.shape[1] == 3, \
             "expecting input of dimension 3x3"
-        out = np.asarray(out)
-        return out
+        array = np.asarray(array)
+        return array
 
     @classmethod
     def _parse_star_arg(

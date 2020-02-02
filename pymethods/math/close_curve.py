@@ -16,5 +16,5 @@ def close_curve(contour: np.array) -> np.array:
     X_dims, _ = contour.shape
     if not np.allclose(contour[:, 0], contour[:, -1]):
         contour = np.append(
-            contour, contour[:, 0, -1], axis=-1)
+            contour, contour[:, 0, None], axis=-1)
     return contour

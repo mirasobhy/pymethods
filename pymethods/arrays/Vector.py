@@ -112,7 +112,8 @@ class Vector(np.ndarray):
             return self
 
     def rotate_around_vector(
-            self, vector: np.ndarray, phi: np.float, units='radians') -> np.ndarray:
+            self, vector: np.ndarray,
+            phi: np.float, units='radians') -> np.ndarray:
         phi = Angle(phi, units=units).rad
         R = math.rotation_matrix(vector, phi)
         return R @ self
@@ -197,7 +198,9 @@ class Vector(np.ndarray):
             v = [(y[1]-y[0])/scale]
             w = [(z[1]-z[0])/scale]
         elif isinstance(arrow_size, (int, float)):
-            du = (x[1]-x[0]); dv = (y[1]-y[0]); dz = (z[1]-z[0])
+            du = (x[1]-x[0])
+            dv = (y[1]-y[0])
+            dz = (z[1]-z[0])
             mag_du = np.sqrt(du**2 + dv**2 + dz**2)
             u = [du/mag_du*arrow_size]
             v = [dv/mag_du*arrow_size]
@@ -242,10 +245,18 @@ class Vector(np.ndarray):
         else:
             z = self[2].squeeze()
 
+        base_kwargs = {
+            'xlim': (x.min()*1.5, x.max()*1.5),
+            'ylim': (y.min()*1.5, y.max()*1.5),
+            'zlim': (z.min()*1.5, z.max()*1.5)
+        }
+
+        base_kwargs.update(kwargs)
+
         obj = go.Scatter3d(
-            x=[x],y=[y],z=[z],
+            x=[x], y=[y], z=[z],
             showlegend=showlegend,
-            **kwargs
+            **base_kwargs
         )
 
         fig.add_trace(obj)
@@ -261,13 +272,17 @@ class Vector(np.ndarray):
         if origin is None:
             origin = np.zeros_like(self)
         else:
-            origin = np.squeeze(origin) * np.ones_like(self)
-        return pyplot.quiver3d(*origin, *self, *args, **kwargs)
+            origin = np.squeeze(origin)[:, None] * np.ones_like(self)
+        f, ax, obj = pyplot.quiver3d(*origin, *self, *args, **kwargs)
+        ax.scatter(*origin, alpha=0)
+        ax.scatter(*(self.squeeze()+origin), alpha=0)
+        return f, ax, obj
 
 
 class ColumnVector(Vector):
     def __new__(cls, *args, **kwargs: dict) -> object:
-        return super(ColumnVector, cls).__new__(cls, *args, column=True, **kwargs)
+        return super(ColumnVector, cls).__new__(
+            cls, *args, column=True, **kwargs)
 
 
 if __name__ == "__main__":

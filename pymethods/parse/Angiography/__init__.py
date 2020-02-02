@@ -1,5 +1,5 @@
-from .AngiographyData import Data, CenterLineData
+from .AngiographyData import Data
 from .AngiographyFolder import Folder
 
 
-__all__ = ['Data', 'CenterLineData', 'Folder']
+__all__ = ['Data', 'Folder']

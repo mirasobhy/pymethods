@@ -92,7 +92,7 @@ def equal_aspect_3d(*args) -> None:
     lims = [getattr(ax, 'get_%slim' % axis)() for axis in ['x', 'y', 'z']]
     r_max = max([np.abs(l[1]-l[0])/2 for l in lims])
     for axes, lim in zip(['x', 'y', 'z'], lims):
-        mid_lim = (lim[1]-lim[0])/2
+        mid_lim = (lim[1]+lim[0])/2
         min_max_lim = [mid_lim - r_max, mid_lim + r_max]
         getattr(ax, 'set_%slim' % axes)(min(min_max_lim), max(min_max_lim))
 

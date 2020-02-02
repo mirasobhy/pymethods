@@ -1,9 +1,5 @@
 import pathlib as pt
 import numpy as np
-try:
-    from pymethods.arrays import Curve
-except ImportError:
-    from ...arrays import Curve
 
 parsable_methods = {
     'LkebCurve': '_parseLkebCurve',
@@ -45,10 +41,22 @@ class Data:
             self.numberOfPointsPerCurve.append(nPoints)
             lines = self.lines[curveStartPoint: (curveStartPoint + nPoints)]
             self.data.append(
-                AngiographyData.linesToArray(lines, dtypeMethod=dtypeMethod)
+                Data.linesToArray(lines, dtypeMethod=dtypeMethod)
             )
             curveStartPoint += nPoints + 2
 
+        delattr(self, 'lines')
+
+    def _parseLkebCurve(self):
+        self.dataType = self.lines[2].split(' ')[-1].strip('\n')
+        self.dimensions = int(self.lines[3].split(' ')[-1])
+        self.numberOfPoints = int(self.lines[4].split(' ')[-1])
+        self.closed = bool(int(self.lines[5].split(' ')[-1]))
+        lines = self.lines[12:(12+self.numberOfPoints)]
+        dtypeMethod = getattr(np, self.dataType)
+        self.data = self.linesToArray(
+            lines, dtypeMethod=dtypeMethod
+        )
         delattr(self, 'lines')
 
     @classmethod
@@ -62,12 +70,4 @@ class Data:
                 line.strip('\n').split(delimeter)
             ).astype(dtypeMethod)
 
-        return array
-
-
-class CenterLineData(Data):
-
-    def __init__(self, dataFile, **kwargs):
-        super().__init__(dataFile)
-        assert self.dataClass == 'LkebCurve'
-        self.data = Curve(self.data, **kwargs)
+        return array.T

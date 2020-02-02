@@ -1,3 +1,5 @@
 {
-    "python.pythonPath": "C:\\Users\\chris\\Anaconda3\\envs\\p37torch130\\python.exe"
+    "python.pythonPath": "F:\\Python\\virtualEnvs\\torch1p4\\Scripts\\python.exe",
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true
 }

@@ -1,5 +1,5 @@
-from . import Angiography
+from . import angiography
 
 __all__ = [
-    'Angiography'
+    'angiography'
 ]

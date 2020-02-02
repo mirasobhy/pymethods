@@ -26,13 +26,13 @@ def frennet_serret_with_transport(
     for i in np.arange(n-1):
         B = math.cross(T[:, i], T[:, i+1])
         if math.l2_norm(B) < 0.0001:
-            V[i+1] = V[i]
+            V[:, i+1] = V[:, i]
         else:
             B = math.normalize(B).squeeze()
             dot_ti_tip1 = math.dot(T[:, i], T[:, i+1])
             phi = np.arccos(dot_ti_tip1).squeeze()
             R = math.rotation_matrix(B, phi)
-            V[i+1, :] = R @ V[:, i]
+            V[:, i+1] = R @ V[:, i]
     U = math.normalize(math.cross(V, T))
     V = math.normalize(math.cross(T, U))
-    return np.stack([U, V, T], axis=0)
+    return np.stack([U.T, V.T, T.T], axis=-1)

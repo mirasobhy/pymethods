@@ -29,20 +29,18 @@ class Curve(arrays.Vectorspace):
     s_frac = utils.NoInputFunctionAlias('fraction_per_point', store=True)
 
     def __init__(self, *args, **kwargs) -> None:
-        self._initialize_splineparams()
-        # self.splineparams.update(kwargs)
-        self._input_kwargs = kwargs
+        self._initialize_splineparams(**kwargs)
         self.dim_funcs = deque()
         self._splinify()
 
-    def _initialize_splineparams(self):
+    def _initialize_splineparams(self, **kwargs):
         self.splineparams = {
             'per': False,
             'k': 3,
             's': None
         }
         self.splineparams.update(
-            self._input_kwargs
+            kwargs
         )
 
     def delta_per_point(self) -> np.ndarray:
@@ -70,6 +68,9 @@ class Curve(arrays.Vectorspace):
         assert np.abs(arc_length) <= self.s_tot
         return arc_length/self.s_tot
 
+    def transport_frames(self):
+        return np.array(math.frennet_serret_with_transport(self))
+
     def _splinify(self, reparam=None):
 
         for i in range(self.shape[0]):
@@ -79,7 +80,7 @@ class Curve(arrays.Vectorspace):
     def __call__(self, s, *args, reparam_curve=None, **kwargs) -> np.ndarray:
 
         if not hasattr(self, 'dim_funcs'):
-            self._initialize_splineparams()
+            self._initialize_splineparams(kwargs)
             self.dim_funcs = deque()
             self._splinify()
 
@@ -109,14 +110,14 @@ class Contour(Curve):
         out = super().__new__(cls, *args, **kwargs)
         return math.close_curve(out).view(cls)
 
-    def _initialize_splineparams(self):
+    def _initialize_splineparams(self, **kwargs):
         self.splineparams = {
             'per': True,
             'k': 3,
             's': None
         }
         self.splineparams.update(
-            self._input_kwargs
+            kwargs
         )
 
     def calc_area(self):
@@ -137,13 +138,37 @@ class FlatContour(Contour):
         Flat contours are ND contours which exist on a plane specified by a
         normal
     """
-    def __new__(cls, *args, normal, **kwargs):
-        normal = arrays.ColumnVector(normal)
+    def __new__(cls, *args, normal=None, **kwargs):
+
         out = super().__new__(cls, *args, **kwargs)
         centroid = out.centroid
         centered = out - centroid
+        if normal is None:
+            normal = math.approximate_normal(centered)
+        normal = arrays.ColumnVector(normal)
         to_plane = math.project_to_plane(centered, normal)
         return math.close_curve(to_plane+centroid).view(cls)
+
+    def get_normal(self):
+        k_test = math.approximate_normal(self-self.centroid)
+        i = math.normalize(self[:, 0, None] - self.centroid)
+        n = math.normalize(
+            self[:, self.shape[-1]//4, None] - self.centroid)
+        k_test = math.normalize(
+            math.cross(i, n))
+        j_test = math.cross(k_test, i)
+        alpha1 = math.smallest_angle_between_vectors(j_test, n)
+        alpha2 = math.smallest_angle_between_vectors(-j_test, n)
+        if alpha1 < alpha2:
+            return arrays.Vector(math.normalize(k_test))
+        else:
+            return arrays.Vector(math.normalize(-k_test))
+
+    def get_basis(self):
+        i = math.normalize(self[:, 0, None] - self.centroid).squeeze()
+        k = self.get_normal()
+        j = math.normalize(math.cross(k, i))
+        return arrays.Basis(i, j, k)
 
     def basis_sort(self, basis):
         math.order_basis
@@ -204,9 +229,3 @@ if __name__ == "__main__":
         ax.scatter(*contour)
         ax.scatter(*contour_flat)
         plt.show()
-
-
-
-
-
-

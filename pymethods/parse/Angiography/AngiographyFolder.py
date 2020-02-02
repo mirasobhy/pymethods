@@ -1,16 +1,57 @@
 import pathlib as pt
 try:
-    from pymethods.parse.Angiography import Data
+    from pymethods.parse.angiography import Data
+    from pymethods.arrays import Curve, FlatContour
 except ImportError:
-    from .AngiographyData import Data
+    from .angiography import Data
+    from ...arrays import Curve, FlatContour
 from abc import abstractmethod
 import numpy as np
 import os
 
 
+class _FolderDescriptor:
+
+    def __init__(self, filename, post_process=None):
+        self.filename = filename
+        self.post_process = post_process
+
+    def __get__(self, obj, objtype):
+        output = obj.parse_filepath(self.filename)
+        if self.post_process is None:
+            return output
+        else:
+            output.data = self.post_process(output.data)
+            return output
+
+
+def post_process_ellipse(parsed_data):
+    return [FlatContour(contour) for contour in parsed_data]
+
+
 class Folder:
 
-    parsableClasses = ['LkebCurve', 'LkebCurveSet']
+    parsable_classes = ['LkebCurve', 'LkebCurveSet']
+
+    bifCenterline1 = _FolderDescriptor(
+        'bifCenterline1.data', post_process=Curve)
+    bifCenterline2 = _FolderDescriptor(
+        'bifCenterline2.data', post_process=Curve)
+
+    centerline1 = _FolderDescriptor(
+        'centerline1.data', post_process=Curve)
+    centerline2 = _FolderDescriptor(
+        'centerline2.data', post_process=Curve)
+
+    BifCoreEllipseSetellipseSet = _FolderDescriptor(
+        'BifCoreEllipseSetellipseSet.data', post_process=post_process_ellipse)
+    BifCoreEllipseSetellipseSet = _FolderDescriptor(
+        'BifCoreEllipseSetellipseSet.data', post_process=post_process_ellipse)
+
+    CrossSectionEllipseSet1 = _FolderDescriptor(
+        'CrossSectionEllipseSet1.data', post_process=post_process_ellipse)
+    CrossSectionEllipseSet2 = _FolderDescriptor(
+        'CrossSectionEllipseSet2.data', post_process=post_process_ellipse)
 
     def __init__(self, folderPath):
         self.folderPath = pt.Path(folderPath)
@@ -23,15 +64,15 @@ class Folder:
     def quickrun(self):
         NotImplemented
 
-    def getFilepath(self, filename):
-        for filePath in self.dataFiles:
+    def get_filepath(self, filename):
+        for filePath in self.files:
             if filename == filePath.name:
                 reqFilePath = filePath
                 break
         return reqFilePath
 
-    def parseFile(self, filename):
-        return Data(self.getFilepath(filename))
+    def parse_filepath(self, filename):
+        return Data(self.get_filepath(filename))
 
     def save(self, filePath):
         np.save(
@@ -48,14 +89,15 @@ class Folder:
             return np.load(np_path).item()
 
     @property
-    def dataFiles(self): return list(self.folderPath.glob('*.data'))
+    def files(self):
+        return list(self.folderPath.glob('*.data'))
 
     @property
-    def dataFileNames(self):
-        return [filePath.name for filePath in self.dataFiles]
+    def filenames(self):
+        return [filePath.name for filePath in self.files]
 
     @property
-    def numpyFiles(self):
+    def numpy_files(self):
         files = list(self.folderPath.glob('*'))
         return [
             item for item in files if item.suffix.lower() in ['.npy', '.npz']

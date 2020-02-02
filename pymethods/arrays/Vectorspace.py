@@ -5,8 +5,8 @@ from .. import math
 import numpy as np
 from .. import utils
 import typing
-import scipy.linalg
 from typing import Union
+
 
 class Vectorspace(Basis):
     normal = utils.NoInputFunctionAlias('calc_normal', store=True)
@@ -21,7 +21,7 @@ class Vectorspace(Basis):
 
     def calc_normal(self):
         return math.approximate_normal(self)
-    
+
     def least_squares_fitting_of_two_point_sets(
             self, vectorspace: np.ndarray) -> Union[np.ndarray, np.float]:
         R, t = math.least_squares_fitting_of_two_point_sets(self, vectorspace)
@@ -40,4 +40,3 @@ class Vectorspace(Basis):
 
     def quiverly(self, *args, **kwargs):
         NotImplementedError()
-        
