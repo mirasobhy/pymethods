@@ -1,14 +1,14 @@
 import numpy as np
 
 try:
-    from pymethods.arrays import FlatContour, Curve, Contour
+    from pymethods.arrays import FlatContour, Curve
     from pymethods import math
 except ImportError:
-    from ...arrays import FlatContour, Curve, Contour
+    from ...arrays import FlatContour, Curve
     from ... import math
 
 from tqdm import tqdm
-import matplotlib.pyplot as plt
+import pyvista as pv
 
 
 class CylindricalSurface(np.ndarray):
@@ -44,7 +44,7 @@ class CylindricalSurface(np.ndarray):
             (self.shape[0], npts, self.shape[-1])
         )
         for i in range(self.shape[-1]):
-            line = Contour(self[:, :, i], **kwargs)
+            line = FlatContour(self[:, :, i], **kwargs)
             newsurface[:, :, i] = line(
                     np.linspace(0, 1, npts)
                 )
@@ -65,6 +65,9 @@ class CylindricalSurface(np.ndarray):
     @classmethod
     def from_contours(cls, contours):
         return cls(cls.align_contour_points(contours))
+
+    def to_vtk(self):
+        return pv.StructuredMeshs(*self)
 
 
 if __name__ == "__main__":
@@ -97,3 +100,6 @@ if __name__ == "__main__":
     plt.scatter3d(*surface)
     plt.equal_aspect_3d()
     plt.show()
+
+    surface.to_vtk().show()
+
