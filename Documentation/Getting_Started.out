@@ -1,3 +1,8 @@
 \BOOKMARK [1][-]{section.1}{Package/Environment Managers and Editors}{}% 1
 \BOOKMARK [1][-]{section.2}{Github}{}% 2
 \BOOKMARK [1][-]{section.3}{Setting up a Miniconda Environment in Visual Studio Code}{}% 3
+\BOOKMARK [1][-]{section.4}{Environment Variable Definitions}{}% 4
+\BOOKMARK [2][-]{subsection.4.1}{Windows Powershell}{section.4}% 5
+\BOOKMARK [2][-]{subsection.4.2}{Mac Bash}{section.4}% 6
+\BOOKMARK [1][-]{section.5}{Setting up a folder in VSC}{}% 7
+\BOOKMARK [1][-]{section.6}{Installing Requirements}{}% 8

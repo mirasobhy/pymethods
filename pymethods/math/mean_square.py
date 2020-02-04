@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def mean_square(array: np.array) -> np.array:
     """mean_square
 

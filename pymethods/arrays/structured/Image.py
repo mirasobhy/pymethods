@@ -31,7 +31,7 @@ class Image(np.ndarray):
         elif isinstance(imagePathOrArray, np.ndarray):
             image = imagePathOrArray
 
-        image = np.asarray(image).view(Image)*1.0
+        image = np.asarray(image).view(cls)*1.0
 
         if len(image.shape) > 3:
             image = image.squeeze()
@@ -283,6 +283,9 @@ class BinaryImage(Image):
         erosion = snm.binary_erosion(self)
         return BinaryImage(
             dilation.astype(np.float32)-erosion.astype(np.float32))
+
+    def measure(self, *args, **kwargs):
+        return [np.fliplr(m) for m in measure.find_contours(self, *args, **kwargs)]
 
     def grab_contour(self):
         """grab_contour

@@ -24,10 +24,21 @@ class CylindricalSurface(np.ndarray):
         if len(args) > 1:
             return np.stack(args, axis=-1)
 
-    def filter(self, **kwargs):
+    def filter(self, retries=10, **kwargs):
+        tries = []
+        roll_vals = np.linspace(
+            0, self.shape[1], retries
+        )
+        for roll in roll_vals:
+            rolled = np.roll(self, int(roll), 1)
+            filtered = math.filters.sgolay2d(
+                rolled, padding='periodic_replication', **kwargs)
+            unrolled = np.roll(filtered, -int(roll), 1)
+
+            tries.append(unrolled)
+
         return self.__class__(
-            math.filters.sgolay2d(
-                self, padding='periodic_replication', **kwargs)
+            np.mean(tries, 0)
         )
 
     def interpolate_long(self, npts, *args, **kwargs):
@@ -95,6 +106,20 @@ class CylindricalSurface(np.ndarray):
 
     def to_vtk(self):
         return pv.StructuredGrid(*self)
+
+    def scatter3d(self, *args, **kwargs):
+        color = kwargs.get('color', 'blue')
+        long = self.shape[-1]
+        for i in range(long):
+            f, ax, obj = Curve.scatter3d(self[:, :, i], *args, color=color, **kwargs)
+        return f, ax, obj
+
+    def plot3d(self, *args, **kwargs):
+        color = kwargs.pop('color', 'blue')
+        long = self.shape[-1]
+        for i in range(long):
+            f, ax, obj = Curve.plot3d(self[:, :, i], *args, color=color, **kwargs)
+        return f, ax, obj
 
 
 if __name__ == "__main__":

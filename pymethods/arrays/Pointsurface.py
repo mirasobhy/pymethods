@@ -1,18 +1,13 @@
 try:
-    # from pymethods import (arrays, utils, pyplot, math, algorithms)
-    from pymethods import (arrays, utils, math, algorithms)
+    from pymethods import (arrays, utils, pyplot, math, algorithms)
 except ImportError:
-    # from .. import arrays, utils, pyplot, math, algorithms, logging_level
-    from .. import arrays, utils, math, algorithms, logging_level
+    from .. import arrays, utils, pyplot, math, algorithms
 import pyvista as pv
-from scipy.spatial import KDTree, cKDTree
+from scipy.spatial import cKDTree
 import numpy as np
 import multiprocessing
 from functools import wraps
 import logging
-from mpl_toolkits.mplot3d import Axes3D
-import time
-import pyvista as pv
 _n_cpus = multiprocessing.cpu_count()
 
 _debug_ = False
@@ -186,90 +181,89 @@ class Pointsurface(arrays.Vectorspace):
         if not self.external:
             self.point_basis *= -1
 
-    # def plot_curvature(self, interval=1, *args, **kwargs):
-    #     f, ax = _CurvatureMultiScatter(
-    #         self, self.principle_curvatures,
-    #         *args, **kwargs
-    #     )(interval=interval)
-    #     return f, ax
+    def plot_curvature(self, interval=1, *args, **kwargs):
+        f, ax = _CurvatureMultiScatter(
+            self, self.principle_curvatures,
+            *args, **kwargs
+        )(interval=interval)
+        return f, ax
 
-    # def plot_analytical_curvature(self, interval=1, *args, **kwargs):
-    #     assert hasattr(self, 'analytical')
-    #     f, ax = _CurvatureMultiScatter(
-    #         self, (self.analytical.k_1, self.analytical.k_2),
-    #         *args, **kwargs
-    #     )(interval=interval)
+    def plot_analytical_curvature(self, interval=1, *args, **kwargs):
+        assert hasattr(self, 'analytical')
+        f, ax = _CurvatureMultiScatter(
+            self, (self.analytical.k_1, self.analytical.k_2),
+            *args, **kwargs
+        )(interval=interval)
 
-    #     return f, ax
+        return f, ax
 
-    # def plot_error(self, interval=1, *args, **kwargs):
-    #     assert hasattr(self, 'analytical')
-    #     error_1 = math.metrics.relative_percentage_difference(
-    #         self.analytical.k_1, self.principle_curvatures[0]
-    #     )
-    #     error_2 = math.metrics.relative_percentage_difference(
-    #         self.analytical.k_2, self.principle_curvatures[1]
-    #     )
-    #     f, ax = _CurvatureMultiScatterError(
-    #         self, (error_1, error_2),
-    #         *args, **kwargs
-    #     )(interval=interval)
+    def plot_error(self, interval=1, *args, **kwargs):
+        assert hasattr(self, 'analytical')
+        error_1 = math.metrics.relative_percentage_difference(
+            self.analytical.k_1, self.principle_curvatures[0]
+        )
+        error_2 = math.metrics.relative_percentage_difference(
+            self.analytical.k_2, self.principle_curvatures[1]
+        )
+        f, ax = _CurvatureMultiScatterError(
+            self, (error_1, error_2),
+            *args, **kwargs
+        )(interval=interval)
 
-    #     return f, ax
+        return f, ax
 
-    # def plot_surface(self, *args, **kwargs):
-    #     if len(args) == 0:
-    #         args = ('.', )
-    #     pyplot.plot3d(*self, *args, **kwargs)
+    def plot_surface(self, *args, **kwargs):
+        if len(args) == 0:
+            args = ('.', )
+        pyplot.plot3d(*self, *args, **kwargs)
 
-    # def check_normals_n_at_a_time(self, interval=1000, n_normals=3) -> None:
-    #     scale = np.mean(self.nn_weights[:, 3])
+    def check_normals_n_at_a_time(self, interval=1000, n_normals=3) -> None:
+        scale = np.mean(self.nn_weights[:, 3])
 
-    #     for i, (point, normal) in enumerate(
-    #             zip(self.T, self.point_normals.T)):
-    #         if i % interval == 0:
-    #             normal = normal*scale
-    #             I_nearest = self.nn_indices[i]
-    #             nn = self[:, I_nearest]
-    #             nn_normals = self.point_normals[I_nearest]
-    #             pyplot.plot3d(*self, '.', alpha=1, markersize=1)
-    #             pyplot.quiver3d(*point, *normal)
-    #             pyplot.equal_aspect_3d_centered(point)
-    #             pyplot.show()
+        for i, (point, normal) in enumerate(
+                zip(self.T, self.point_normals.T)):
+            if i % interval == 0:
+                normal = normal*scale
+                I_nearest = self.nn_indices[i]
+                nn = self[:, I_nearest]
+                nn_normals = self.point_normals[I_nearest]
+                pyplot.plot3d(*self, '.', alpha=1, markersize=1)
+                pyplot.quiver3d(*point, *normal)
+                pyplot.equal_aspect_3d_centered(point)
+                pyplot.show()
 
-    # def check_all_normals(self, interval=100) -> None:
-    #     centroid = math.mean(self)
-    #     scale = np.mean(self.nn_weights[:, 3])
-    #     normals = self.point_normals[:, ::interval]*scale
-    #     pyplot.plot3d(*self[:, ::interval], '.', alpha=1, markersize=1)
-    #     pyplot.quiver3d(
-    #         *self[:, ::interval],
-    #         *normals)
-    #     pyplot.equal_aspect_3d_centered(centroid)
-    #     pyplot.show()
-        
+    def check_all_normals(self, interval=100) -> None:
+        centroid = math.mean(self)
+        scale = np.mean(self.nn_weights[:, 3])
+        normals = self.point_normals[:, ::interval]*scale
+        pyplot.plot3d(*self[:, ::interval], '.', alpha=1, markersize=1)
+        pyplot.quiver3d(
+            *self[:, ::interval],
+            *normals)
+        pyplot.equal_aspect_3d_centered(centroid)
+        pyplot.show()
+
     def write_structured_vtk(self, newshape):
         newshape = list(newshape)
-        
+
         assert all(
             [
-                len(newshape) == 3, 
+                len(newshape) == 3,
                 any(
                     [newshape[0] == 3, newshape[0] == 2]
                 )
             ]
-        ) 
-        
+        )
+
         to_write = np.array(self.copy()).reshape(newshape)
-        
-        
+
         mesh = pv.StructuredGrid(*to_write)
-            
+
         if hasattr(self, 'principle_curvatures'):
             for name in ('gaussian_curvature', 'mean_curvature', 'maximum_curvature', 'minimum_curvature'):
                 temp = np.array(getattr(self, name)).reshape(newshape[1:])
                 mesh.points_arrays[name] = temp.squeeze().flatten('F')
-                
+
 
 
 # if __name__ == "__main__":

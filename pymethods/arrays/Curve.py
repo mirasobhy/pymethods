@@ -8,6 +8,8 @@ except ImportError:
 import numpy as np
 from collections import deque
 import scipy.interpolate as sci
+import scipy.signal as ss
+import pyvista as pv
 
 
 class SplineFunc:
@@ -29,9 +31,10 @@ class Curve(arrays.Vectorspace):
     s_frac = utils.NoInputFunctionAlias('fraction_per_point', store=True)
 
     def __init__(self, *args, **kwargs) -> None:
+        reparam_curve = kwargs.pop('reparam_curve', None)
         self._initialize_splineparams(**kwargs)
         self.dim_funcs = deque()
-        self._splinify()
+        self._splinify(reparam=reparam_curve)
 
     def _initialize_splineparams(self, **kwargs):
         self.splineparams = {
@@ -71,6 +74,50 @@ class Curve(arrays.Vectorspace):
     def transport_frames(self):
         return np.array(math.frennet_serret_with_transport(self))
 
+    def findPointPairsAtPerpendicularDistance(
+        self, curve, distance=0, resolution=None, tolerance=0.1,
+        getClosest=True
+    ):
+        pointPairs = []
+        vtkCurve = pv.Spline(curve.T)
+        if resolution is not None:
+            interpolatedSelf = self(np.arange(0, 1, resolution))
+        else:
+            interpolatedSelf = self
+        T = interpolatedSelf.transport_frames()[:, :, -1]
+        minDistance = 10000
+        minID = 10000
+        for i, origin in enumerate(interpolatedSelf.T):
+            slicedPoints = vtkCurve.slice(
+                normal=T[i], origin=origin).points
+            if len(slicedPoints) > 0:
+                for point in slicedPoints:
+                    perpDistance = np.linalg.norm(point - origin)
+                    diffFromDesired = np.abs(perpDistance-distance)
+                    if diffFromDesired < minDistance:
+                        minDistance = diffFromDesired
+                        minID = i
+                    if diffFromDesired <= tolerance:
+                        pointPairs.append(
+                            {
+                                'on_main': origin,
+                                'on_input': point.view(arrays.Vector).astype(
+                                    origin.dtype),
+                                'error': diffFromDesired
+                            }
+                        )
+        if len(pointPairs) == 0:
+            print(
+                f' the minimum distance {minDistance} for origin point {minID}')
+        if len(pointPairs) != 0:
+            if getClosest:
+                pointPairs.sort(key=lambda x: x['error'])
+                pointPairs = pointPairs[0]
+        else:
+            pass
+
+        return pointPairs
+
     def _splinify(self, reparam=None):
 
         if reparam is None:
@@ -81,7 +128,7 @@ class Curve(arrays.Vectorspace):
         for i in range(self.shape[0]):
             try:
                 spline_func = sci.splrep(s, self[i], **self.splineparams)
-            except:
+            except ValueError:
                 y_unique, unique_inds = np.unique(
                     self[i][0:-2], return_index=True)
                 unique_inds.sort()
@@ -93,7 +140,13 @@ class Curve(arrays.Vectorspace):
                     s_unique, y_unique, **self.splineparams)
             self.dim_funcs.append(SplineFunc(spline_func))
 
-    def __call__(self, s, *args, reparam_curve=None, **kwargs) -> np.ndarray:
+    def filter(self, window_length, polyorder, **kwargs):
+        self = self.view(np.ndarray)
+        return self.__class__(
+            ss.savgol_filter(self, window_length, polyorder, **kwargs))
+
+    def __call__(
+            self, s, *args, reparam_curve=None, **kwargs) -> np.ndarray:
 
         if not hasattr(self, 'dim_funcs'):
             self._initialize_splineparams(kwargs)
@@ -114,6 +167,9 @@ class Curve(arrays.Vectorspace):
             s[s < 0] = s[s < 0] + 1
 
         return self.__class__(np.stack([f(s) for f in self.dim_funcs]))
+
+    def to_vtk(self):
+        return pv.Spline(self.T)
 
 
 class Contour(Curve):
@@ -148,11 +204,56 @@ class Contour(Curve):
             math.approximate_normal(centered)
         )
 
+    def __call__(
+            self, s, *args, reparam_curve=None,
+            close=True, **kwargs) -> np.ndarray:
+
+        if not hasattr(self, 'dim_funcs'):
+            self._initialize_splineparams(kwargs)
+            self.dim_funcs = deque()
+            self._splinify()
+
+        if reparam_curve is None:
+            param_curve = self
+        else:
+            param_curve = Curve(reparam_curve)
+
+        if self.mode in 'arclength':
+            s = s/param_curve.s_tot
+
+        assert all([s.max() <= 1, s.min() >= -1])
+
+        if utils.is_iterable(s):
+            s[s < 0] = s[s < 0] + 1
+        if close:
+            return self.__class__(np.stack([f(s) for f in self.dim_funcs]))
+        else:
+            return Curve(np.stack([f(s) for f in self.dim_funcs]))
+
+    def filter(
+            self, window_length, polyorder, mode='wrap', retries=10, **kwargs):
+        import matplotlib.pyplot as plt
+        original_class = self.__class__
+        self = self.view(np.ndarray)
+        signals = []
+        rolls = np.linspace(
+            len(self.T), retries
+        )
+        for roll in rolls:
+            roll = int(roll)
+            rolled = np.roll(self, roll, -1)
+            filtered = ss.savgol_filter(
+                rolled, window_length, polyorder, mode=mode, **kwargs)
+            unrolled = np.roll(filtered, -roll, -1)
+            signals.append(unrolled)
+        mean = np.mean(signals, 0)
+        return original_class(mean)
+
 
 class FlatContour(Contour):
     """FlatContour
         Flat contours are ND contours which exist on a plane specified by a
-        normal
+        normal. Note: The contour is automatically converted to 3d
     """
     def __new__(cls, *args, normal=None, **kwargs):
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250 64-bit) (preloaded format=pdflatex 2020.1.29)  3 FEB 2020 18:07
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250 64-bit) (preloaded format=pdflatex 2020.1.29)  3 FEB 2020 20:03
 entering extended mode
 **./Getting_Started.tex
 (Getting_Started.tex
@@ -268,23 +268,44 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 )
 \Hy@SectionHShift=\skip46
 )
-(Getting_Started.aux)
+("D:\Latex\MiKTeX 2.9\tex/latex/dirtree\dirtree.sty"
+Package: dirtree 2012/12/11 v0.32 package wrapper for dirtree
+
+("D:\Latex\MiKTeX 2.9\tex/generic/dirtree\dirtree.tex"
+`dirtree' v0.32, 2012/12/11 (jcc)
+\DT@offset=\dimen126
+\DT@width=\dimen127
+\DT@sep=\dimen128
+\DT@all=\dimen129
+\DT@rulewidth=\dimen130
+\DT@dotwidth=\dimen131
+\DTbaselineskip=\dimen132
+\DT@counti=\count114
+\DT@countii=\count115
+\DT@countiii=\count116
+\DT@countiv=\count117
+\DT@indent=\dimen133
+\DT@parskip=\dimen134
+\DT@baselineskip=\dimen135
+)
+File: dirtree.tex 2012/12/11 v0.32 `dirtree' (jcc)
+) (Getting_Started.aux)
 \openout1 = `Getting_Started.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -322,16 +343,16 @@ LaTeX Font Info:    ... okay on input line 12.
 
 ("D:\Latex\MiKTeX 2.9\tex/context/base/mkii\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count114
-\scratchdimen=\dimen126
+\scratchcounter=\count118
+\scratchdimen=\dimen136
 \scratchbox=\box29
-\nofMPsegments=\count115
-\nofMParguments=\count116
+\nofMPsegments=\count119
+\nofMParguments=\count120
 \everyMPshowfont=\toks23
-\MPscratchCnt=\count117
-\MPscratchDim=\dimen127
-\MPnumerator=\count118
-\makeMPintoPDFobject=\count119
+\MPscratchCnt=\count121
+\MPscratchDim=\dimen137
+\MPnumerator=\count122
+\makeMPintoPDFobject=\count123
 \everyMPtoPDFconversion=\toks24
 ) ("D:\Latex\MiKTeX 2.9\tex/latex/epstopdf-pkg\epstopdf-base.sty"
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -339,7 +360,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 85.
 )
 \AtBeginShipoutBox=\box30
-Package hyperref Info: Link coloring OFF on input line 12.
+Package hyperref Info: Link coloring OFF on input line 13.
 
 ("D:\Latex\MiKTeX 2.9\tex/latex/hyperref\nameref.sty"
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
@@ -350,72 +371,99 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ("D:\Latex\MiKTeX 2.9\tex/generic/gettitlestring\gettitlestring.sty"
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count120
+\c@section@level=\count124
 )
-LaTeX Info: Redefining \ref on input line 12.
-LaTeX Info: Redefining \pageref on input line 12.
-LaTeX Info: Redefining \nameref on input line 12.
+LaTeX Info: Redefining \ref on input line 13.
+LaTeX Info: Redefining \pageref on input line 13.
+LaTeX Info: Redefining \nameref on input line 13.
 
 (Getting_Started.out) (Getting_Started.out)
 \@outlinefile=\write3
 \openout3 = `Getting_Started.out'.
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 14.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 15.
 
 
 ("D:\Latex\MiKTeX 2.9\tex/latex/amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 14.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 15.
 
 
 ("D:\Latex\MiKTeX 2.9\tex/latex/amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 1
-9.
+LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 2
+0.
 
 ("D:\Latex\MiKTeX 2.9\tex/latex/base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 19.
-<figures/miniconda.PNG, id=7, 1433.355pt x 196.48407pt>
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 20.
+<figures/miniconda.PNG, id=39, 1433.355pt x 196.48407pt>
 File: figures/miniconda.PNG Graphic file (type png)
 <use figures/miniconda.PNG>
-Package pdftex.def Info: figures/miniconda.PNG  used on input line 24.
+Package pdftex.def Info: figures/miniconda.PNG  used on input line 25.
 (pdftex.def)             Requested size: 358.33788pt x 49.1209pt.
-<figures/vsc_page.PNG, id=12, 980.16188pt x 712.16063pt>
+<figures/vsc_page.PNG, id=44, 980.16188pt x 712.16063pt>
 File: figures/vsc_page.PNG Graphic file (type png)
 <use figures/vsc_page.PNG>
-Package pdftex.def Info: figures/vsc_page.PNG  used on input line 31.
+Package pdftex.def Info: figures/vsc_page.PNG  used on input line 32.
 (pdftex.def)             Requested size: 245.03987pt x 178.03972pt.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 40.
+<figures/AnacondaVSC.PNG, id=52, 1087.06125pt x 333.49594pt>
+File: figures/AnacondaVSC.PNG Graphic file (type png)
+<use figures/AnacondaVSC.PNG>
+Package pdftex.def Info: figures/AnacondaVSC.PNG  used on input line 41.
+(pdftex.def)             Requested size: 434.81679pt x 133.39601pt.
  [1
 
 {C:/Users/chris/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map} <./figures/m
 iniconda.PNG> <./figures/vsc_page.PNG>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 40.
+<figures/VSCTerminal.PNG, id=69, 1447.65843pt x 300.3722pt>
+File: figures/VSCTerminal.PNG Graphic file (type png)
+<use figures/VSCTerminal.PNG>
+Package pdftex.def Info: figures/VSCTerminal.PNG  used on input line 49.
+(pdftex.def)             Requested size: 463.26016pt x 96.12105pt.
+ [2 <./figures/AnacondaVSC.PNG> <./figures/VSCTerminal.PNG>]
+<figures/folder.PNG, id=86, 740.7675pt x 424.58624pt>
+File: figures/folder.PNG Graphic file (type png)
+<use figures/folder.PNG>
+Package pdftex.def Info: figures/folder.PNG  used on input line 105.
+(pdftex.def)             Requested size: 370.38284pt x 212.2926pt.
+<figures/select_interporeter_A.PNG, id=89, 1446.90562pt x 183.68625pt>
+File: figures/select_interporeter_A.PNG Graphic file (type png)
+<use figures/select_interporeter_A.PNG>
+Package pdftex.def Info: figures/select_interporeter_A.PNG  used on input line 
+114.
+(pdftex.def)             Requested size: 434.07504pt x 55.1063pt.
+<figures/select_interpreter_b.PNG, id=91, 1044.15094pt x 837.88031pt>
+File: figures/select_interpreter_b.PNG Graphic file (type png)
+<use figures/select_interpreter_b.PNG>
+Package pdftex.def Info: figures/select_interpreter_b.PNG  used on input line 1
+23.
+(pdftex.def)             Requested size: 261.0371pt x 209.46956pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[3 <./figures/folder.PNG> <./figures/select_interporeter_A.PNG>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 136.
+ [4 <./figures/select_interpreter_b.PNG>]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 136.
  (Getting_Started.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 40.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 40.
-
-
-Package rerunfilecheck Warning: File `Getting_Started.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `Getting_Started.out':
-(rerunfilecheck)             Before: D41D8CD98F00B204E9800998ECF8427E;0
-(rerunfilecheck)             After:  5788AD23BB18717809D80225EA7317CA;207.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 40.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 136.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 136.
+Package rerunfilecheck Info: File `Getting_Started.out' has not changed.
+(rerunfilecheck)             Checksum: 993437F127E4AD9B31EA58748E24A366;517.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 136.
  ) 
 Here is how much of TeX's memory you used:
- 6742 strings out of 492448
- 96472 string characters out of 3133435
- 191782 words of memory out of 3000000
- 10972 multiletter control sequences out of 15000+200000
- 11364 words of font info for 45 fonts, out of 3000000 for 9000
+ 6866 strings out of 492448
+ 98484 string characters out of 3133435
+ 194157 words of memory out of 3000000
+ 11070 multiletter control sequences out of 15000+200000
+ 12017 words of font info for 47 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  40i,7n,34p,441b,403s stack positions out of 5000i,500n,10000p,200000b,50000s
 <D:/Latex/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><D:/Latex/MiKT
@@ -423,10 +471,11 @@ eX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><D:/Latex/MiKTeX 2.9/fonts/typ
 e1/public/amsfonts/cm/cmr10.pfb><D:/Latex/MiKTeX 2.9/fonts/type1/public/amsfont
 s/cm/cmr12.pfb><D:/Latex/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><D
 :/Latex/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><D:/Latex/MiKTeX 2
-.9/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on Getting_Started.pdf (1 page, 427672 bytes).
+.9/fonts/type1/public/amsfonts/cm/cmti10.pfb><D:/Latex/MiKTeX 2.9/fonts/type1/p
+ublic/amsfonts/cm/cmtt10.pfb>
+Output written on Getting_Started.pdf (4 pages, 727669 bytes).
 PDF statistics:
- 63 PDF objects out of 1000 (max. 8388607)
- 7 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 139 PDF objects out of 1000 (max. 8388607)
+ 20 named destinations out of 1000 (max. 500000)
+ 100 words of extra memory for PDF output out of 10000 (max. 10000000)
 

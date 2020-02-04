@@ -9,6 +9,7 @@ except ImportError:
     from ..arrays import Angle
     from .. import utils
 
+import logging
 
 class Array(np.ndarray):
     pass
@@ -73,6 +74,12 @@ class Vector(np.ndarray):
             if len(self.shape) == 2:
                 if self.shape[-1] > 1:
                     self.__class__ = Array
+
+    def make_3d(self):
+        if self.shape[0] < 3:
+            return self.__class__(math.make_3d(self))
+        elif self.shape[0] > 3:
+            logging.info("dimensions are greater than 3 cannot convert to 3d")
 
     def rotation_matrix(self, phi: np.float, units='radians') -> np.ndarray:
         """rotation_matrix
