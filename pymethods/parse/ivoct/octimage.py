@@ -1,8 +1,8 @@
 try:
-    from pymethods import arrays
+    from pymethods import arrays, math
     import pymethods.pyplot as plt
 except ImportError:
-    from ... import arrays
+    from ... import arrays, math
     from ... import pyplot as plt
 import numpy as np
 
@@ -17,6 +17,7 @@ class OCTImage(arrays.structured.Image):
             color, check,
         ).fill_holes()
         contour = binary.grab_contour().T
+        contour = math.make_3d(contour)
         contour = arrays.Contour(contour)
         return contour
 
@@ -28,7 +29,7 @@ class OCTImage(arrays.structured.Image):
         )
         landmark = binary.measure(0.8)[0]
         if len(landmark) > 0:
-            vector = arrays.ColumnVector(np.mean(landmark, 0).T)
+            vector = arrays.ColumnVector(np.mean(landmark, 0).T).make_3d()
             return vector
         else:
             return None

@@ -35,9 +35,10 @@ from .minimum_bounding_box import minimum_bounding_box
 from .summary_statistics import SummaryStatistics
 from . import metrics
 from . import filters
+from .basis_sorting import argSortByBasis, sortByBasis
 
 __all__ = [
-    'approximate_basis', 'least_squares_fitting_of_two_point_sets', 'rigid_transform', 'dot',
+    'approximate_basis', 'least_squares_fitting_of_two_point_sets', 'dot',
     'vector_project', 'project_to_plane', 'change_basis', 'rotation_matrix',
     'frennet_serret', 'frennet_serret_with_transport', 'cart2pol', 'pol2cart',
     'all_diameters', 'area_assumed_diameter', 'is_linearly_dependent',
@@ -46,5 +47,5 @@ __all__ = [
     'SummaryStatistics', 'metrics', 'mean_square', 'mean_square_error',
     'cross', 'make_3d', 'skew_symmetric_3d', 'l2_norm', 'mean', 'close_curve',
     'area', 'contour_centroid', 'normalize', 'scalar_project', 'order_basis',
-    'filters', 'approximate_normal'
+    'filters', 'approximate_normal', 'argSortByBasis', 'sortByBasis'
 ]

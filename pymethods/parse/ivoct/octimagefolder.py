@@ -1,5 +1,5 @@
 try:
-    from pymethods.parse.oct import OCTImage
+    from pymethods.parse.ivoct import OCTImage
     from pymethods.utils import enumerate_chunk
 except ImportError:
     from . import OCTImage
@@ -128,6 +128,7 @@ class OCTFolder:
         landmark = None
         N = np.arange(len(imageList))
 
+        basis = np.identity(3)
 
         for i in tqdm(N, disable=not kwargs.get('progressBar', False)):
             path = pt.Path(imageList[i])
@@ -135,6 +136,15 @@ class OCTFolder:
             try:
                 contour = octImage.get_contour(
                         color=contourColor, check=contourCheck)
+                contour = contour.filter(11, 3)
+                contour = contour.sortByBasis(basis)
+                import pymethods.pyplot as plt
+                contour(np.linspace(0, 0.99, 100)).scatter3d()
+                plt.show()
+                plt.scatter(*contour[0:2, :])
+                plt.scatter(*contour[0:2, np.arange(0, 1000, 2)])
+                plt.show()
+
                 contours.append(
                     {
                         'path': path,
@@ -148,7 +158,7 @@ class OCTFolder:
                      parse_path_name(path.name, landmarkName)]):
                 try:
                     landmarkVector = octImage.get_landmark_vector(
-                        color=landmarkColor, check=landmarkCheck).make_3d()
+                        color=landmarkColor, check=landmarkCheck)
                     contour_centroid = contour.centroid
                     landmarkVector = landmarkVector - contour_centroid
                     landmark = {

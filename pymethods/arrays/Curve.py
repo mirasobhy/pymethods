@@ -128,17 +128,24 @@ class Curve(arrays.Vectorspace):
         for i in range(self.shape[0]):
             try:
                 spline_func = sci.splrep(s, self[i], **self.splineparams)
-            except ValueError:
-                y_unique, unique_inds = np.unique(
-                    self[i][0:-2], return_index=True)
-                unique_inds.sort()
-                s_unique = np.concatenate(
-                    [s[unique_inds], s[-1, None]])
-                y_unique = np.concatenate(
-                    [y_unique, self[i][-1, None]])
-                spline_func = sci.splrep(
-                    s_unique, y_unique, **self.splineparams)
-            self.dim_funcs.append(SplineFunc(spline_func))
+                self.dim_funcs.append(SplineFunc(spline_func))
+            except:
+                try:
+                    y_unique, unique_inds = np.unique(
+                        self[i][0:-2], return_index=True)
+                    unique_inds.sort()
+                    s_unique = np.concatenate(
+                        [s[unique_inds], s[-1, None]])
+                    y_unique = np.concatenate(
+                        [y_unique, self[i][-1, None]])
+                    spline_func = sci.splrep(
+                        s_unique, y_unique, **self.splineparams)
+                    self.dim_funcs.append(SplineFunc(spline_func))
+                except:
+                    if len(y_unique) > 1:
+                        pass
+                    else:
+                        raise Exception
 
     def filter(self, window_length, polyorder, **kwargs):
         self = self.view(np.ndarray)
@@ -249,10 +256,23 @@ class Contour(Curve):
         mean = np.mean(signals, 0)
         return original_class(mean)
 
+    def get_basis(self):
+        i = math.normalize(self[:, 0, None] - self.centroid).squeeze()
+        k = self.get_normal()
+        j = math.normalize(math.cross(k, i))
+        return arrays.Basis(i, j, k)
+
+    def argsortByBasis(self, basis):
+        return math.argSortByBasis(self, basis)
+
+    def sortByBasis(self, basis):
+        sorted_args = self.argsortByBasis(basis)
+        return self.__class__(self[:, sorted_args.astype(int)])
+
 
 class FlatContour(Contour):
     """FlatContour
-        Flat contours are ND contours which exist on a plane specified by a
+        Flat contours are 3d contours which exist on a plane specified by a
         normal. Note: The contour is automatically converted to 3d
     """
     def __new__(cls, *args, normal=None, **kwargs):
@@ -280,15 +300,6 @@ class FlatContour(Contour):
             return arrays.Vector(math.normalize(k_test))
         else:
             return arrays.Vector(math.normalize(-k_test))
-
-    def get_basis(self):
-        i = math.normalize(self[:, 0, None] - self.centroid).squeeze()
-        k = self.get_normal()
-        j = math.normalize(math.cross(k, i))
-        return arrays.Basis(i, j, k)
-
-    def basis_sort(self, basis):
-        math.order_basis
 
 
 if __name__ == "__main__":
